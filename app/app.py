@@ -4,6 +4,13 @@ import utils.functions as codc_interview_functions
 import logging
 import datetime
 
+#TODO:
+# add functionality to handle no input: stop system and return message no country given
+# add to README that countries should be given, otherwise no ouput
+# add to output, if final df is empty, give output that selected data has no data from given country
+# add unittests
+# add unittest that after data is read, schemas should be compared.
+
 def main():
     # Get or create Spark session
     spark = (SparkSession.builder.master("local").appName("codc_interview_wessel").getOrCreate())
@@ -22,8 +29,10 @@ def main():
 
     # Read in data
     df_customer = codc_interview_functions.read_csv_data(spark, csv_path=filepath_customer_data)
+    #TODO: check schema df_customer
     df_financial_data = codc_interview_functions.read_csv_data(spark, csv_path=filepath_financial_data)
-
+    #TODO: check schema df_financial_data
+    
     # Transform data
     df_customer = codc_interview_functions.filter_countries(spark, df_customer, "country", country_list)
     financial_data_column_renames_dict = {

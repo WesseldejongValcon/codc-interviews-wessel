@@ -12,19 +12,30 @@ def configure_logging():
     py4j_logger = logging.getLogger("py4j").setLevel(logging.ERROR)
 
 
-def get_filepath_data(spark: SparkSession, title: str):
+def get_filepath_data(spark: SparkSession, title: str) -> str:
     return askopenfilename(title=title)
 
 
-def get_countries(spark: SparkSession):
+def get_countries(spark: SparkSession) -> List[str]:
+    """
+    Ask user to enter the desired country names.
+
+    Parameters:
+    spark (SparkSession): The Spark session used for DataFrame operations.
+
+    Returns:
+    A list with country names in String format.
+    """
     root = tk.Tk()
     root.title("Country Input")
 
     input_country_list = []
 
+    # Function to open input dialog
     def get_input():
         input_window = tk.Toplevel(root)
         input_window.title("Country")
+        input_window.geometry("700x350")
 
         entry = tk.Entry(input_window)
         entry.pack()
@@ -41,6 +52,7 @@ def get_countries(spark: SparkSession):
         stop_button = tk.Button(input_window, text="Stop", command=input_window.destroy)
         stop_button.pack()
     
+    # Function to exit the input window
     def exit_input():
         root.destroy()
         root.quit()
@@ -54,6 +66,7 @@ def get_countries(spark: SparkSession):
     root.mainloop()
 
     return input_country_list
+
 
 def read_csv_data(spark: SparkSession, csv_path: str) -> DataFrame:
     """
@@ -103,6 +116,15 @@ def filter_countries(spark: SparkSession, df: DataFrame, column_name: str, count
 
 
 def rename_column(spark: SparkSession, df: DataFrame, old_column_name: str, new_column_name: str) -> DataFrame:
+    """
+    Renames a column of an input DataFrame
+
+    Parameters:
+    spark (SparkSession): The Spark session used for DataFrame operations.
+    df (DataFrame): The DataFrame to be filtered.
+    old_column_name (str): The name of the column to be changed.
+    new_column_name (str): The name the column should become.
+    """
     return df.withColumnRenamed(old_column_name, new_column_name)    
 
 
