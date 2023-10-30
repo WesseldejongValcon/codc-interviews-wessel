@@ -2,7 +2,7 @@ from typing import List
 from pyspark.sql import DataFrame
 from pyspark.sql import SparkSession
 import logging
-from tkinter.filedialog import askopenfilename
+from tkinter.filedialog import askopenfilename, askdirectory
 import tkinter as tk
 
 def configure_logging():
@@ -14,6 +14,10 @@ def configure_logging():
 
 def get_filepath_data(spark: SparkSession, title: str) -> str:
     return askopenfilename(title=title)
+
+
+def get_folder_path(spark: SparkSession, title: str) -> str:
+    return askdirectory(title=title)
 
 
 def get_countries(spark: SparkSession) -> List[str]:
