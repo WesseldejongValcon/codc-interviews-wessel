@@ -1,6 +1,59 @@
 from typing import List
 from pyspark.sql import DataFrame
 from pyspark.sql import SparkSession
+import logging
+from tkinter.filedialog import askopenfilename
+import tkinter as tk
+
+def configure_logging():
+    # Set up and configure logging
+    logging.basicConfig(filename=f"app/logs/codc_interview_logs.log", level=logging.DEBUG)
+    pyspark_log = logging.getLogger("pyspark").setLevel(logging.ERROR)
+    py4j_logger = logging.getLogger("py4j").setLevel(logging.ERROR)
+
+
+def get_filepath_data(spark: SparkSession, title: str):
+    return askopenfilename(title=title)
+
+
+def get_countries(spark: SparkSession):
+    root = tk.Tk()
+    root.title("Country Input")
+
+    input_country_list = []
+
+    def get_input():
+        input_window = tk.Toplevel(root)
+        input_window.title("Country")
+
+        entry = tk.Entry(input_window)
+        entry.pack()
+
+        def confirm_input():
+            user_input = entry.get()
+            input_country_list.append(user_input)
+            entry.delete(0, tk.END)
+            input_window.destroy()
+
+        confirm_button = tk.Button(input_window, text="Confirm", command=confirm_input)
+        confirm_button.pack()
+
+        stop_button = tk.Button(input_window, text="Stop", command=input_window.destroy)
+        stop_button.pack()
+    
+    def exit_input():
+        root.destroy()
+        root.quit()
+    
+    get_input_button = tk.Button(root, text="Add Country Name", command=get_input)
+    get_input_button.pack()
+
+    stop_input_button = tk.Button(root, text="Done", command=exit_input)
+    stop_input_button.pack()
+
+    root.mainloop()
+
+    return input_country_list
 
 def read_csv_data(spark: SparkSession, csv_path: str) -> DataFrame:
     """
