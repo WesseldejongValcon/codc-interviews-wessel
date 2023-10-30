@@ -6,6 +6,9 @@ from tkinter.filedialog import askopenfilename, askdirectory
 import tkinter as tk
 
 def configure_logging():
+    """
+    Logging file is selected or created where the logging will be stored.
+    """
     # Set up and configure logging
     logging.basicConfig(filename=f"app/logs/codc_interview_logs.log", level=logging.DEBUG)
     pyspark_log = logging.getLogger("pyspark").setLevel(logging.ERROR)
@@ -13,10 +16,30 @@ def configure_logging():
 
 
 def get_filepath_data(spark: SparkSession, title: str) -> str:
+    """
+    User is requested to specify in which file path the input data can be found.
+
+    Parameters:
+    spark (SparkSession): The Spark session used for DataFrame operations.
+    title (str): Title to be displayed in the input window.
+
+    Returns:
+    A String containing the absolute file path.
+    """
     return askopenfilename(title=title)
 
 
 def get_folder_path(spark: SparkSession, title: str) -> str:
+    """
+    User is requested to specify in which folder path the output data will be stored.
+
+    Parameters:
+    spark (SparkSession): The Spark session used for DataFrame operations.
+    title (str): Title to be displayed in the input window.
+
+    Returns:
+    A String containing the absolute folder path.
+    """
     return askdirectory(title=title)
 
 
@@ -121,24 +144,48 @@ def filter_countries(spark: SparkSession, df: DataFrame, column_name: str, count
 
 def rename_column(spark: SparkSession, df: DataFrame, old_column_name: str, new_column_name: str) -> DataFrame:
     """
-    Renames a column of an input DataFrame
+    Renames a column of an input DataFrame.
 
     Parameters:
     spark (SparkSession): The Spark session used for DataFrame operations.
     df (DataFrame): The DataFrame to be filtered.
     old_column_name (str): The name of the column to be changed.
     new_column_name (str): The name the column should become.
+
+    Returns:
+    The input DataFrame including the change of the old column name into the new column name.
     """
     return df.withColumnRenamed(old_column_name, new_column_name)    
 
 
 def rename_columns_from_dict(spark: SparkSession, df: DataFrame, dict_name_changes: dict) -> DataFrame:
-    print(f"dict_name_changes: {dict_name_changes}")
+    """
+    Given a dictionary, this function takes an input DataFrame and renames all keys into the corresponding values.
+    
+    Parameters:
+    spark (SparkSession): The Spark session used for DataFrame operations.
+    df (DataFrame): The DataFrame to be filtered.
+    dict_name_changes (dict): The dictionary where the keys represent columns to be changed and the values represent the corresponding desired column names.
+    
+    Returns:
+    The input DataFrame including the name changes that correspond with the input dictionary.
+    """
     for old_column_name, new_column_name in dict_name_changes.items():
         df = df.withColumnRenamed(old_column_name, new_column_name)
     return df
 
 
 def drop_column(spark: SparkSession, df: DataFrame, column_name_to_drop: str) -> DataFrame:
+    """
+    Drops a single column from an input DataFrame
+
+    Parameters:
+    spark (SparkSession): The Spark session used for DataFrame operations.
+    df (DataFrame): The DataFrame to be adjusted.
+    column_name_to_drop (str): The name of the column that needs to be dropped.
+
+    Returns:
+    The input DataFrame excluding the column that is given as input.
+    """
     return df.drop(column_name_to_drop)
           

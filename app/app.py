@@ -52,7 +52,8 @@ def main():
     
     result_pandas = df_joined.toPandas()
     result_pandas.to_csv(f"{filepath_output_folder}/client_data_abn_{datetime.datetime.now().strftime('%Y%m%d')}.csv", index=False)
-
+    logging.info(f"{df_joined.count()} rows are stored.")
+    
     logging.info(f"Application has run successfully and ended at {datetime.datetime.now().strftime('%d %B, %Y - %H:%M:%S')}")
 
 if __name__ == '__main__':
