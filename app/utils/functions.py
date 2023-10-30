@@ -1,8 +1,6 @@
 from typing import List
 from pyspark.sql import DataFrame
 from pyspark.sql import SparkSession
-from chispa import assert_df_equality, schema_comparer
-from pyspark.sql.types import StructField, StructType, StringType
 
 def read_csv_data(spark: SparkSession, csv_path: str) -> DataFrame:
     """
@@ -16,24 +14,6 @@ def read_csv_data(spark: SparkSession, csv_path: str) -> DataFrame:
     """
     return spark.read.format("csv").option("header", "True").load(f"{csv_path}")
 
-def test_filter_countries(spark: SparkSession):
-    data = [
-        ("United Kingdom", "London"),
-        ("United States", "New York"),
-        ("Netherlands", "Amsterdam"),
-        (None, None)
-    ]
-    df = (spark.createDataFrame(data, ["Country", "City"]))
-    
-    actual_df = filter_countries(spark, df, "Country", ["United Kingdom", "Netherlands"])
-    
-    expected_data = [
-        ("United Kingdom", "London"),
-        ("Netherlands", "Amsterdam")
-    ]
-    expected_df = spark.createDataFrame(expected_data, ["Country", "City"])
-    
-    assert_df_equality(actual_df, expected_df)
 
 def filter_countries(spark: SparkSession, df: DataFrame, column_name: str, country_list: List[str]) -> DataFrame:
     """
@@ -68,33 +48,18 @@ def filter_countries(spark: SparkSession, df: DataFrame, column_name: str, count
     
     return df.where(f"{filter_statement}")
 
-def test_rename_column(spark: SparkSession):
-    data = [
-        ("United Kingdom", "London"),
-        ("United States", "New York"),
-        ("Netherlands", "Amsterdam"),
-        (None, None)
-    ]
-    df = (spark.createDataFrame(data, ["Country", "City"]))
-
-    actual_df = rename_column(spark, df, "City", "Town")
-
-    expected_df = df.withColumnRenamed("City", "Town")
-
-    expected_schema = StructType([
-        StructField("City", StringType(), True),
-        StructField("Town", StringType(), True)
-    ])
-
-
 
 def rename_column(spark: SparkSession, df: DataFrame, old_column_name: str, new_column_name: str) -> DataFrame:
     return df.withColumnRenamed(old_column_name, new_column_name)    
 
+
 def rename_columns_from_dict(spark: SparkSession, df: DataFrame, dict_name_changes: dict) -> DataFrame:
-    for old_column_name, new_column_name in dict_name_changes:
+    print(f"dict_name_changes: {dict_name_changes}")
+    for old_column_name, new_column_name in dict_name_changes.items():
         df = df.withColumnRenamed(old_column_name, new_column_name)
     return df
 
+
 def drop_column(spark: SparkSession, df: DataFrame, column_name_to_drop: str) -> DataFrame:
     return df.drop(column_name_to_drop)
+          

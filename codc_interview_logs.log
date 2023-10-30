@@ -7,3 +7,7 @@ ERROR:root:And non-ASCII stuff, too, like Øresund and Malmö
 INFO:root:Application codc_interview_wessel started at 25 October, 2023 - 17:00:38
 WARNING:root:And this, too
 ERROR:root:And non-ASCII stuff, too, like Øresund and Malmö
+INFO:root:Application codc_interview_wessel started at 30 October, 2023 - 10:10:19
+INFO:root:Application codc_interview_wessel started at 30 October, 2023 - 10:12:15
+INFO:root:Application codc_interview_wessel started at 30 October, 2023 - 10:14:27
+INFO:root:Application has run successfully and ended at 30 October, 2023 - 10:14:33
