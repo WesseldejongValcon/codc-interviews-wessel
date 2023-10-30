@@ -7,7 +7,7 @@ import utils.functions as codc_interview_functions
 import logging
 import datetime
 
-logging.basicConfig(filename=f"codc_interview_logs.log", level=logging.DEBUG)
+logging.basicConfig(filename=f"app/logs/codc_interview_logs.log", level=logging.DEBUG)
 
 pyspark_log = logging.getLogger("pyspark").setLevel(logging.ERROR)
 py4j_logger = logging.getLogger("py4j").setLevel(logging.ERROR)
